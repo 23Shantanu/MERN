@@ -1,66 +1,59 @@
-import React from 'react';
-
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import {
-  VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH
-} from '../../shared/util/validators';
-import { useForm } from '../../shared/hooks/form-hook';
-import './PlaceForm.css';
+import React, { useState } from "react";
+import Button from "../../shared/components/FormElements/Button";
+import "./PlaceForm.css";
 
 const NewPlace = () => {
-  const [formState, inputHandler] = useForm(
-    {
-      title: {
-        value: '',
-        isValid: false
-      },
-      description: {
-        value: '',
-        isValid: false
-      },
-      address: {
-        value: '',
-        isValid: false
-      }
-    },
-    false
-  );
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [address, setAddress] = useState("");
 
-  const placeSubmitHandler = event => {
+  const placeSubmitHandler = (event) => {
     event.preventDefault();
-    console.log(formState.inputs); // send this to the backend!
+    console.log(title, description, address); // send this to the backend!
+  };
+  const handleChange = (e) => {
+    if (e.target.name === "title") {
+      setTitle(e.target.value);
+    } else if (e.target.name === "description") {
+      setDescription(e.target.value);
+    } else if (e.target.name === "address") {
+      setAddress(e.target.value);
+    }
   };
 
   return (
-    <form className="place-form" onSubmit={placeSubmitHandler}>
-      <Input
+    <form className={`place-form form-control`} onSubmit={placeSubmitHandler}>
+      <label htmlFor={"title"}>{"Title"}</label>
+      <input
         id="title"
         element="input"
+        name="title"
         type="text"
         label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid title."
-        onInput={inputHandler}
+        onChange={handleChange}
+        value={title}
       />
-      <Input
+      <br />
+      <label htmlFor="description">{"Description"}</label>
+      <input
         id="description"
-        element="textarea"
+        type="textarea"
+        name="description"
         label="Description"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter a valid description (at least 5 characters)."
-        onInput={inputHandler}
+        onChange={handleChange}
+        value={description}
       />
-      <Input
+      <br />
+      <label htmlFor="address">{"Address"}</label>
+      <input
         id="address"
-        element="input"
+        type="textarea"
+        name="address"
         label="Address"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid address."
-        onInput={inputHandler}
+        onChange={handleChange}
+        value={address}
       />
-      <Button type="submit" disabled={!formState.isValid}>
+      <Button type="submit" disabled={false}>
         ADD PLACE
       </Button>
     </form>
